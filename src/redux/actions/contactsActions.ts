@@ -33,20 +33,43 @@ export const loadContactsError = () => {
   };
 };
 
+export const loadContacts = () => {
+  return (dispatch: any) => {
+    try {
+      dispatch(loadContactsStart());
+      return dispatch(loadContactsSuccess());
+    } catch (err) {
+      return dispatch(loadContactsError());
+    }
+  };
+};
+
 export const addContactStart = () => {
   return {
     type: ADD_CONTACT_START,
   };
 };
 
-export const addContactSuccess = () => {
+export const addContactSuccess = (payload: any) => {
   return {
     type: ADD_CONTACT_SUCCESS,
+    payload,
   };
 };
 export const addContactError = () => {
   return {
     type: ADD_CONTACT_ERROR,
+  };
+};
+
+export const addContact = (data: any) => {
+  return (dispatch: any) => {
+    try {
+      dispatch(addContactStart());
+      return dispatch(addContactSuccess(data));
+    } catch (err) {
+      return dispatch(addContactError());
+    }
   };
 };
 
@@ -56,9 +79,10 @@ export const viewContactStart = () => {
   };
 };
 
-export const viewContactSuccess = () => {
+export const viewContactSuccess = (payload: any) => {
   return {
     type: VIEW_CONTACT_SUCCESS,
+    payload,
   };
 };
 export const viewContactError = () => {
@@ -67,20 +91,43 @@ export const viewContactError = () => {
   };
 };
 
-export const UpdateContactStart = () => {
+export const viewContact = (data: any) => {
+  return (dispatch: any) => {
+    try {
+      dispatch(viewContactStart());
+      return dispatch(viewContactSuccess(data));
+    } catch (err) {
+      return dispatch(viewContactError());
+    }
+  };
+};
+
+export const updateContactStart = () => {
   return {
     type: UPDATE_CONTACT_START,
   };
 };
 
-export const updateContactSuccess = () => {
+export const updateContactSuccess = (payload: any) => {
   return {
     type: UPDATE_CONTACT_SUCCESS,
+    payload,
   };
 };
 export const updateContactError = () => {
   return {
     type: UPDATE_CONTACT_ERROR,
+  };
+};
+
+export const updateContact = (data: any, index: any) => {
+  return (dispatch: any) => {
+    try {
+      dispatch(updateContactStart());
+      return dispatch(updateContactSuccess({ data, index }));
+    } catch (err) {
+      return dispatch(updateContactError());
+    }
   };
 };
 
@@ -90,13 +137,25 @@ export const deleteContactStart = () => {
   };
 };
 
-export const deleteContactSuccess = () => {
+export const deleteContactSuccess = (payload: any) => {
   return {
     type: DELETE_CONTACT_SUCCESS,
+    payload,
   };
 };
 export const deleteContactError = () => {
   return {
     type: DELETE_CONTACT_ERROR,
+  };
+};
+
+export const deleteContact = (data: any) => {
+  return (dispatch: any) => {
+    try {
+      dispatch(deleteContactStart());
+      return dispatch(deleteContactSuccess(data));
+    } catch (err) {
+      return dispatch(deleteContactError());
+    }
   };
 };

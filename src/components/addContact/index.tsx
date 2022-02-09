@@ -27,39 +27,51 @@ const schema = yup
     age: yup.number().min(1).max(200),
     avatar: yup.string(),
     website: yup.string().url(),
-    tags: yup.array().of(yup.string()),
+    tags: yup.string(),
   })
   .required();
 
-export const AddContact: FC = () => {
+type Props = {
+  readonly?: boolean;
+  addContact: Function;
+  editContact: Function;
+  viewContactData?: any;
+  editContactData?: any;
+  isEditMode?: any;
+  editIndex?: any;
+};
+
+export const AddContact: FC<Props> = ({
+  readonly = false,
+  addContact,
+  editContact,
+  viewContactData,
+  editContactData,
+  isEditMode,
+  editIndex,
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInputs>({
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      telephone: 0,
-      email: "",
-      age: 0,
-      avatar: "",
-      website: "",
-      tags: [],
-    },
+    defaultValues: viewContactData ? viewContactData : editContactData,
     resolver: yupResolver(schema),
   });
-  const onSubmit = handleSubmit((data) => console.log(data));
+
+  const onSubmit = (data: any) =>
+    isEditMode ? editContact(data, editIndex) : addContact(data);
 
   return (
     <div className="m-4">
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)} className="container">
         <div className="mb-3 form-group">
           <label htmlFor="firstName" className="form-labe">
             First Name
           </label>
           <input
-            {...register("firstName")}
+            {...register("firstName", { required: true })}
+            disabled={readonly}
             className={`form-control ${
               errors.firstName?.message ? "is-invalid" : ""
             }`}
@@ -72,7 +84,8 @@ export const AddContact: FC = () => {
             Last Name
           </label>
           <input
-            {...register("lastName")}
+            {...register("lastName", { required: true })}
+            disabled={readonly}
             className={`form-control ${
               errors.lastName?.message ? "is-invalid" : ""
             }`}
@@ -85,7 +98,8 @@ export const AddContact: FC = () => {
             telephone
           </label>
           <input
-            {...register("telephone")}
+            {...register("telephone", { required: true })}
+            disabled={readonly}
             className={`form-control ${
               errors.telephone?.message ? "is-invalid" : ""
             }`}
@@ -98,7 +112,8 @@ export const AddContact: FC = () => {
             Email
           </label>
           <input
-            {...register("email")}
+            {...register("email", { required: true })}
+            disabled={readonly}
             className={`form-control ${
               errors.email?.message ? "is-invalid" : ""
             }`}
@@ -111,7 +126,8 @@ export const AddContact: FC = () => {
             Age
           </label>
           <input
-            {...register("age")}
+            {...register("age", { required: true })}
+            disabled={readonly}
             className={`form-control ${
               errors.age?.message ? "is-invalid" : ""
             }`}
@@ -124,7 +140,8 @@ export const AddContact: FC = () => {
             Avatar
           </label>
           <input
-            {...register("avatar")}
+            {...register("avatar", { required: true })}
+            disabled={readonly}
             className={`form-control ${
               errors.avatar?.message ? "is-invalid" : ""
             }`}
@@ -137,7 +154,8 @@ export const AddContact: FC = () => {
             Website
           </label>
           <input
-            {...register("website")}
+            {...register("website", { required: true })}
+            disabled={readonly}
             className={`form-control ${
               errors.website?.message ? "is-invalid" : ""
             }`}
@@ -150,7 +168,8 @@ export const AddContact: FC = () => {
             Tags
           </label>
           <input
-            {...register("tags")}
+            {...register("tags", { required: true })}
+            disabled={readonly}
             className={`form-control ${
               errors.tags && errors.tags.length > 0 ? "is-invalid" : ""
             }`}
@@ -158,9 +177,25 @@ export const AddContact: FC = () => {
           {/* <p>{errors.tags}</p> */}
         </div>
 
-        <button type="submit" className="btn btn-outline-primary">
-          + Add Contact
-        </button>
+        <div className="d-flex justify-content-center mt-4">
+          {!isEditMode ? (
+            !readonly && (
+              <input
+                type="submit"
+                disabled={readonly}
+                className="btn btn-outline-primary"
+                value={`+ Add Contact`}
+                style={{ justifySelf: "center" }}
+              />
+            )
+          ) : (
+            <input
+              type="submit"
+              className="btn btn-outline-primary"
+              value={`Update Contact`}
+            />
+          )}
+        </div>
       </form>
     </div>
   );
