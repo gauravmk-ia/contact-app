@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 
-export const Contacts: FC = () => {
+export const Contact: FC = () => {
   return <div>HELLO</div>;
 };
 
-export default Contacts;
+export default Contact;
